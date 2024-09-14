@@ -65,7 +65,8 @@ export default defineComponent({
 
   &-right {
     &-content {
-      background-color: blue;
+      background-color: #2965e6;
+      color: white;
       margin-right: 8px;
     }
   }

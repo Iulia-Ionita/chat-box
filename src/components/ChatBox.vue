@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref, watch } from "vue";
 import { useApiStore } from "@/stores/apiStore";
 import ComposeArea from "@/components/ComposeArea.vue";
 import MessageEntry from "@/components/MessageEntry.vue";
@@ -13,8 +13,17 @@ export default defineComponent({
     const apiStore = useApiStore();
     const currentUser = JSON.parse(apiStore.storeCurrentUser);
     const conversation = JSON.parse(apiStore.storeConversation);
+    const newMessages = apiStore.storeMessages;
 
-    return { currentUser, conversation };
+    const chatBox = ref<HTMLDivElement | null>(null);
+
+    watch(newMessages, () => {
+      if (chatBox.value) {
+        chatBox.value.scrollTop = chatBox.value.scrollHeight;
+      }
+    });
+
+    return { currentUser, conversation, newMessages };
   },
 });
 </script>
@@ -25,6 +34,14 @@ export default defineComponent({
       <div v-for="message in conversation">
         <MessageEntry :message="message" :active="message.from.id === currentUser.id" />
       </div>
+
+      <div v-if="newMessages">
+        <div v-for="message in newMessages">
+          <MessageEntry :message="message" :active="message.from.id === currentUser.id" />
+        </div>
+      </div>
+
+
     </div>
     <ComposeArea />
   </div>
