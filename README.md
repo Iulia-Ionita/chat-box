@@ -1,4 +1,4 @@
-# vue3-typescript-pinia-router
+# chat-box
 
 ## Project setup
 ```
