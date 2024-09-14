@@ -15,22 +15,25 @@ export default defineComponent({
     const conversation = JSON.parse(apiStore.storeConversation);
     const newMessages = apiStore.storeMessages;
 
-    const chatBox = ref<HTMLDivElement | null>(null);
+    const chatBox = ref<HTMLElement | null>(null);
 
     watch(newMessages, () => {
       if (chatBox.value) {
-        chatBox.value.scrollTop = chatBox.value.scrollHeight;
+        chatBox.value.scrollTo({
+          top: chatBox.value.scrollHeight,
+          behavior: 'smooth'
+        });
       }
     });
 
-    return { currentUser, conversation, newMessages };
+    return { currentUser, conversation, newMessages, chatBox };
   },
 });
 </script>
 
 <template>
   <div class="container-box">
-    <div class="chat-box">
+    <div class="chat-box" ref="chatBox">
       <div v-for="message in conversation">
         <MessageEntry :message="message" :active="message.from.id === currentUser.id" />
       </div>
